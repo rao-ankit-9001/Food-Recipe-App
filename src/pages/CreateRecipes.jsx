@@ -1,14 +1,22 @@
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form'
-
+import { recipecontext } from '../context/RecipesContext';
+import{ nanoid }from 'nanoid';
+import { toast } from 'react-toastify';
 function CreateRecipes(){
+    const {Recipes, setRecipes} = useContext(recipecontext);
+
     const {register, handleSubmit, reset, formState: {errors}} = useForm();
 
-    const submitHandler=(data)=>{
-        console.log(data);
+    const submitHandler=(NewRecipe)=>{
+            NewRecipe.id = nanoid();
+            setRecipes([...Recipes, NewRecipe])
+            toast.success('New Recipe add successfully');
+            reset();
         
     } 
     return(
-            <div className="flex flex-col items-center justify-center gap-10 pt-10 outline-1 my-5 mx-20 py-5 ">
+            <div className="flex flex-col items-center justify-center gap-10 pt-10 outline-1 my-5 mx-20 py-5">
                 <h1 className='text-xl font-bold'>Create recipes</h1>
 
 
@@ -29,7 +37,7 @@ function CreateRecipes(){
 
                      <input 
                      className="outline-0 border-b p-1"
-                     {...register('chef name')}
+                     {...register('chefname')}
                      type="text" 
                      placeholder='Chef Name'
                      />
