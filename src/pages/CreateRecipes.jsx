@@ -3,14 +3,18 @@ import { useForm } from 'react-hook-form'
 import { recipecontext } from '../context/RecipesContext';
 import{ nanoid }from 'nanoid';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 function CreateRecipes(){
     const {Recipes, setRecipes} = useContext(recipecontext);
 
     const {register, handleSubmit, reset, formState: {errors}} = useForm();
 
+    const Navigate = useNavigate();
+
     const submitHandler=(NewRecipe)=>{
             NewRecipe.id = nanoid();
             setRecipes([...Recipes, NewRecipe])
+            Navigate('/recipes')
             toast.success('New Recipe add successfully');
             reset();
         
@@ -20,10 +24,13 @@ function CreateRecipes(){
                 <h1 className='text-xl font-bold'>Create recipes</h1>
 
 
-                <form className='flex flex-col gap-10' onSubmit={handleSubmit(submitHandler)}>
+                <form 
+                className='flex flex-col gap-10 w-1/2' 
+                onSubmit={handleSubmit(submitHandler)}
+                >
                     <input 
                     className="outline-0 border-b p-1"
-                    {...register('title')}
+                    {...register('recipeName')}
                     type="text" 
                     placeholder='Recipe Name'
                     />
@@ -31,13 +38,13 @@ function CreateRecipes(){
                     <input 
                     className="outline-0 border-b p-1"
                     {...register('image')}
-                    type="file"
-                    placeholder='Recipe image'
+                    type="url"
+                    placeholder='Recipe image(Url)'
                      />
 
                      <input 
                      className="outline-0 border-b p-1"
-                     {...register('chefname')}
+                     {...register('chefName')}
                      type="text" 
                      placeholder='Chef Name'
                      />
@@ -61,6 +68,7 @@ function CreateRecipes(){
                     />
 
                     <select
+                    className='bg-black'
                     {...register('category')}
                     >
                         <option value="cat1">category 1</option>
