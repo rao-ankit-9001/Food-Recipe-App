@@ -11,10 +11,10 @@ function Mainrouter(){
     return(
             <Routes>
                     <Route path='/' element={<Home/>}/>
+                    <Route path='/create-recipes' element={<CreateRecipes/>}/>
                     <Route path='/recipes' element={<Recipes/>}/> 
                     <Route path='/recipes/:id' element={<SingleRecipe/>}/>
                     <Route path='/about' element={<About/>}/>
-                    <Route path='/create-recipes' element={<CreateRecipes/>}/>
             </Routes>
     )
 }

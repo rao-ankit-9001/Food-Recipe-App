@@ -12,7 +12,7 @@ function Recipes() {
     })
     return (
 
-        <div className="py-5 px-5 flex flex-wrap items-center gap-5">
+        <div className="py-5 px-5 flex flex-wrap items-center mx-auto gap-5">
             <>{AllRecipes}</>
         </div>
 

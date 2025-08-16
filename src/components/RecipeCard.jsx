@@ -11,7 +11,7 @@ function RecipeCard(props) {
     }
   return (
     <div
-      className="flex gap-5 rounded-2xl w-1/2 shadow-sm shadow-white"
+      className="flex gap-5 rounded-2xl w-[48%] shadow-sm shadow-white"
     >
       <img
         className="w-50 h-50 object-cover rounded-2xl"
@@ -26,11 +26,11 @@ function RecipeCard(props) {
         <p className="text-gray-300">Chef : {chefName}</p>
         <p className="text-gray-300">Category : {category}</p>
         <p className="text-gray-300 text-sm leading-3.5">
-            {description.slice(0,100)}...
+            {description.slice(0,80)}...
         </p>
 
         <button 
-        className="bg-red-600 px-4 py-1 rounded-sm font-bold cusror-pointer hover:scale-105 active:scale-100 duration-300"
+        className="bg-red-600 px-4 py-1 rounded-sm font-bold cusror-pointer hover:scale-105 active:scale-100 duration-300 mt-4"
         onClick={()=>SingleRecipe(id)}
         >
           View Full Recipe
