@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { IoMdClose } from "react-icons/io";
-import { nanoid } from "nanoid";
 
 
 function SingleRecipe() {
@@ -13,12 +12,18 @@ function SingleRecipe() {
   const Navigate = useNavigate();
   const [isActive, setIsActive] = useState(false)
 
+  
    const FilterRecipe = Recipes.find(recipe => String(recipe.id) === String(params.id));
   if (FilterRecipe !== undefined) {
     localStorage.setItem("recipe", JSON.stringify(FilterRecipe));
   }
+
   const recipe = JSON.parse(localStorage.getItem('recipe'));
+  console.log(FilterRecipe.id);
+ 
   const { recipeName, image, description, chefName, ingredients, instructions, category } = recipe;
+  // console.log(recipeName);
+  
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues:{
       recipeName : recipeName,
@@ -32,9 +37,6 @@ function SingleRecipe() {
   });
 
  
-  
-
-  
   // Delete Recipe handler
 
   const deleteRecipe = (id) => {
@@ -46,16 +48,15 @@ function SingleRecipe() {
 
   }
 
-
-
   // update Recipe handler
   const updatedRecipe = (recipe) => {
     const id = params.id;
     const index = Recipes.findIndex(recipe => recipe.id === id)
 
     const copyData = [...Recipes];
-    copyData[index] = { ...recipe};
+    copyData[index] = { ...copyData[index], ...recipe};
     console.log(copyData);
+    
     
     setRecipes(copyData);
     setIsActive(false);
@@ -91,7 +92,6 @@ function SingleRecipe() {
 
           <input
             className="outline-0 border-b p-1"
-            value={image}
             {...register('image')}
             type="url"
             placeholder='Recipe image(Url)'
@@ -99,7 +99,6 @@ function SingleRecipe() {
 
           <input
             className="outline-0 border-b p-1"
-            value={chefName}
             {...register('chefName')}
             type="text"
             placeholder='Chef Name'
@@ -107,28 +106,24 @@ function SingleRecipe() {
 
           <textarea
             className='outline-0 border-b'
-            value={description}
             {...register('description')}
             placeholder='Describe For Recipe'
           />
 
           <textarea
             className='outline-0 border-b'
-            value={ingredients}
             {...register('ingredients')}
             placeholder='Ingredients For Recipe(Seperated by comma)'
           />
 
           <textarea
             className='outline-0 border-b'
-            value={instructions}
             {...register('instructions')}
             placeholder='Write Intructions'
           />
 
           <select
             className='bg-white'
-            value={category}
             {...register('category')}
           >
             <option value="cat1">category 1</option>

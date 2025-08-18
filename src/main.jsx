@@ -7,12 +7,12 @@ import { BrowserRouter } from 'react-router-dom'
 import RecipeContext from './context/RecipesContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
     <RecipeContext>
     <App />
     <ToastContainer autoClose='1000'/>
     </RecipeContext>
     </BrowserRouter>
-  </StrictMode>,
+  // </StrictMode>,
 )
