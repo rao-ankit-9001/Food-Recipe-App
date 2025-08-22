@@ -10,7 +10,9 @@ function SingleRecipe() {
   const { id } = useParams();
   const Navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
-
+  const [favroite, setFavroite] = useState(
+    JSON.parse(localStorage.getItem('fav')) || []
+  );
   const recipe = Recipes.find((recipe) => recipe.id === id);
   if (!recipe) {
     return (
@@ -34,8 +36,28 @@ function SingleRecipe() {
   });
 
 
+
+
+  const favroiteHandler = () => {
+    // setFavroite([...favroite, recipe]);
+    let copyData = [...favroite];
+    copyData.push(recipe);
+    setFavroite(copyData);
+    localStorage.setItem('fav', JSON.stringify(copyData));
+  }
+
+  const unfavroiteHandler = () => {
+    const filterfav = favroite.filter((f) => f.id !== recipe.id);
+    setFavroite(filterfav);
+    localStorage.setItem('fav', JSON.stringify(filterfav));
+  }
+
+
   const deleteRecipe = (id) => {
     const updatedRecipe = Recipes.filter((recipe) => recipe.id !== id);
+    const favFilter = favroite.filter(recipe => recipe.id !== id);
+    setFavroite(favFilter);
+    localStorage.setItem('fav', JSON.stringify(favFilter));
     setRecipes(updatedRecipe);
     toast.error("Recipe deleted successfully");
     Navigate("/recipes");
@@ -43,6 +65,11 @@ function SingleRecipe() {
 
   const updatedRecipe = (data) => {
     const index = Recipes.findIndex((r) => r.id === id);
+    const favIndex = favroite.findIndex(recipe => recipe.id === id);
+    const copyFav = [...favroite];
+    copyFav[favIndex] = { ...copyFav[favIndex], ...data };
+    setFavroite(copyFav);
+    localStorage.setItem('fav', JSON.stringify(copyFav));
     const copyData = [...Recipes];
     copyData[index] = { ...copyData[index], ...data };
 
@@ -52,34 +79,17 @@ function SingleRecipe() {
     Navigate("/recipes");
   };
 
-  const [favroite, setFavroite] = useState(
-    JSON.parse(localStorage.getItem('fav')) || []
-  );
-   
-  const favroiteHandler = () =>{
-    // setFavroite([...favroite, recipe]);
-    let copyData = [...favroite];
-    copyData.push(recipe);
-    setFavroite(copyData);
-    localStorage.setItem('fav', JSON.stringify(copyData));
-  }
 
-  const unfavroiteHandler  = () =>{
-    const filterfav = favroite.filter((f)=> f.id !== recipe.id);
-    setFavroite(filterfav);
-    localStorage.setItem('fav', JSON.stringify(filterfav));
-  }
 
   // useEffect(()=>{
   //   console.log('page rerender');
-    
+
   // },[favroite])
   return (
-     <div className="flex items-center justify-center relative">
+    <div className="flex items-center justify-center relative">
       <div
-        className={`bg-white flex flex-col items-center justify-center gap-5 w-[50%] rounded-2xl shadow-xl shadow-white pt-10 my-5 mx-20 py-5 absolute ${
-          isActive ? "block" : "hidden"
-        } z-10`}
+        className={`bg-white flex flex-col items-center justify-center gap-5 w-[50%] rounded-2xl shadow-xl shadow-white pt-10 my-5 mx-20 py-5 absolute ${isActive ? "block" : "hidden"
+          } z-10`}
       >
         <button
           onClick={() => setIsActive(false)}
@@ -137,18 +147,18 @@ function SingleRecipe() {
       </div>
 
       <div className="flex gap-5 rounded-xl mt-5 mx-10 shadow-sm shadow-white relative">
-      {favroite.find((f)=> f.id === recipe.id) ? ( 
-        <i 
-        onClick={unfavroiteHandler}
-       className="text-2xl text-amber-300 absolute right-2 ri-star-fill cursor-pointer">
-       </i>):
-      (<i
-      onClick={favroiteHandler}
-       className="text-2xl absolute right-2 ri-star-line cursor-pointer">
-       </i> )
-      
-}
-       {image &&  <img
+        {favroite.find((f) => f.id === recipe.id) ? (
+          <i
+            onClick={unfavroiteHandler}
+            className="text-2xl text-amber-300 absolute right-2 ri-star-fill cursor-pointer">
+          </i>) :
+          (<i
+            onClick={favroiteHandler}
+            className="text-2xl absolute right-2 ri-star-line cursor-pointer">
+          </i>)
+
+        }
+        {image && <img
           className="w-100 h-100 object-cover rounded-2xl"
           src={image}
           alt="img"

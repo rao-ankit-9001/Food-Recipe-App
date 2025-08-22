@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 function RecipeCard(props) {
   const { id, image, recipeName, chefName, description, category } = props.recipe;
-  console.log(props);
-  
+
   const Navigate = useNavigate();
 
   const SingleRecipe = (id) => {

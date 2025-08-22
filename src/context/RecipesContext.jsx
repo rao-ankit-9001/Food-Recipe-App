@@ -3,9 +3,12 @@ import { createContext, useEffect, useState } from "react";
 
 export const recipecontext = createContext(null);
 
-function RecipeContext(props){
+function RecipeContext(props) {
+  if (!localStorage.getItem('fav')) {
+    localStorage.setItem('fav', JSON.stringify([]));
 
-    const localData = [{
+  }
+  const localData = [{
     "recipeName": "Spicy Paneer Tikka",
     "image": "https://bing.com/th?id=OSK.604d9a439cb00d32875d08842ef36ebb",
     "description": "Fiery grilled paneer cubes marinated in yogurt and spices. A classic Indian starter.",
@@ -25,7 +28,7 @@ function RecipeContext(props){
     ],
     "chefName": "Chef Rao",
     "category": "Indian Starter",
-    id : nanoid()
+    id: nanoid()
   },
   {
     "recipeName": "Creamy Alfredo Pasta",
@@ -46,7 +49,7 @@ function RecipeContext(props){
     ],
     "chefName": "Chef Maria",
     "category": "Italian Main",
-    id : nanoid()
+    id: nanoid()
   },
   {
     "recipeName": "Veggie Spring Rolls",
@@ -67,7 +70,7 @@ function RecipeContext(props){
     ],
     "chefName": "Chef Lee",
     "category": "Chinese Side",
-    id : nanoid()
+    id: nanoid()
   },
   {
     "recipeName": "Chocolate Lava Cake",
@@ -87,7 +90,7 @@ function RecipeContext(props){
     ],
     "chefName": "Chef Aryan",
     "category": "Dessert",
-    id : nanoid()
+    id: nanoid()
   },
   {
     "recipeName": "Quinoa Buddha Bowl",
@@ -108,23 +111,23 @@ function RecipeContext(props){
     ],
     "chefName": "Chef Nia",
     "category": "Healthy Bowl",
-    id : nanoid()
+    id: nanoid()
   }]
 
   const [Recipes, setRecipes] = useState(() => {
-        const storedRecipesJson = localStorage.getItem("recipes");
-        return storedRecipesJson ? JSON.parse(storedRecipesJson) : [];
-    });
+    const storedRecipesJson = localStorage.getItem("recipes");
+    return storedRecipesJson ? JSON.parse(storedRecipesJson) : localData;
+  });
 
-    useEffect(() => {
-        localStorage.setItem("recipes", JSON.stringify(Recipes));
-    }, [Recipes]);
-    return(
-        <recipecontext.Provider value={{Recipes, setRecipes}}>
-            {props.children}
-        </recipecontext.Provider>
-    )
-    
+  useEffect(() => {
+    localStorage.setItem("recipes", JSON.stringify(Recipes));
+  }, [Recipes]);
+  return (
+    <recipecontext.Provider value={{ Recipes, setRecipes }}>
+      {props.children}
+    </recipecontext.Provider>
+  )
+
 }
 
 export default RecipeContext;
