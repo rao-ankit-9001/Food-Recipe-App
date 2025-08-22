@@ -1,13 +1,11 @@
 import { nanoid } from "nanoid";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const recipecontext = createContext(null);
 
 function RecipeContext(props){
 
-    const [Recipes, setRecipes] = useState([
-       
-  {
+    const localData = [{
     "recipeName": "Spicy Paneer Tikka",
     "image": "https://bing.com/th?id=OSK.604d9a439cb00d32875d08842ef36ebb",
     "description": "Fiery grilled paneer cubes marinated in yogurt and spices. A classic Indian starter.",
@@ -111,11 +109,16 @@ function RecipeContext(props){
     "chefName": "Chef Nia",
     "category": "Healthy Bowl",
     id : nanoid()
-  }
+  }]
 
+  const [Recipes, setRecipes] = useState(() => {
+        const storedRecipesJson = localStorage.getItem("recipes");
+        return storedRecipesJson ? JSON.parse(storedRecipesJson) : [];
+    });
 
-
-    ]);
+    useEffect(() => {
+        localStorage.setItem("recipes", JSON.stringify(Recipes));
+    }, [Recipes]);
     return(
         <recipecontext.Provider value={{Recipes, setRecipes}}>
             {props.children}

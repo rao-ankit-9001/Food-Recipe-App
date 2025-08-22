@@ -12,8 +12,6 @@ function SingleRecipe() {
   const [isActive, setIsActive] = useState(false);
 
   const recipe = Recipes.find((recipe) => recipe.id === id);
-  console.log(recipe);
-  
   if (!recipe) {
     return (
       <div className="flex items-center justify-center h-screen text-2xl text-red-500 font-bold">
@@ -21,7 +19,6 @@ function SingleRecipe() {
       </div>
     );
   }
-
   const { recipeName, image, description, chefName, ingredients, instructions, category } = recipe;
 
   const { register, handleSubmit } = useForm({
@@ -36,10 +33,6 @@ function SingleRecipe() {
     },
   });
 
-  useEffect(()=>{
-      console.log('hii');
-      
-  },[])
 
   const deleteRecipe = (id) => {
     const updatedRecipe = Recipes.filter((recipe) => recipe.id !== id);
@@ -59,8 +52,30 @@ function SingleRecipe() {
     Navigate("/recipes");
   };
 
+  const [favroite, setFavroite] = useState(
+    JSON.parse(localStorage.getItem('fav')) || []
+  );
+   
+  const favroiteHandler = () =>{
+    // setFavroite([...favroite, recipe]);
+    let copyData = [...favroite];
+    copyData.push(recipe);
+    setFavroite(copyData);
+    localStorage.setItem('fav', JSON.stringify(copyData));
+  }
+
+  const unfavroiteHandler  = () =>{
+    const filterfav = favroite.filter((f)=> f.id !== recipe.id);
+    setFavroite(filterfav);
+    localStorage.setItem('fav', JSON.stringify(filterfav));
+  }
+
+  // useEffect(()=>{
+  //   console.log('page rerender');
+    
+  // },[favroite])
   return (
-    <div className="flex items-center justify-center relative">
+     <div className="flex items-center justify-center relative">
       <div
         className={`bg-white flex flex-col items-center justify-center gap-5 w-[50%] rounded-2xl shadow-xl shadow-white pt-10 my-5 mx-20 py-5 absolute ${
           isActive ? "block" : "hidden"
@@ -121,12 +136,23 @@ function SingleRecipe() {
         </form>
       </div>
 
-      <div className="flex gap-5 rounded-xl mt-5 mx-10 shadow-sm shadow-white">
-        <img
+      <div className="flex gap-5 rounded-xl mt-5 mx-10 shadow-sm shadow-white relative">
+      {favroite.find((f)=> f.id === recipe.id) ? ( 
+        <i 
+        onClick={unfavroiteHandler}
+       className="text-2xl text-amber-300 absolute right-2 ri-star-fill cursor-pointer">
+       </i>):
+      (<i
+      onClick={favroiteHandler}
+       className="text-2xl absolute right-2 ri-star-line cursor-pointer">
+       </i> )
+      
+}
+       {image &&  <img
           className="w-100 h-100 object-cover rounded-2xl"
           src={image}
           alt="img"
-        />
+        />}
 
         <div className="w-1/2 flex flex-col gap-2">
           <h1 className="text-2xl font-bold text-red-600">{recipeName}</h1>
